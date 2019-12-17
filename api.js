@@ -31,6 +31,8 @@ app.get('/store/data', db.getAllStores);
 app.get('/shopping/store/name', db.getStoreAndShoppingByName);
 
 app.post('/results', db.createResult);
+app.get('/results/get', db.getResultByDateAndTime);
+app.get('/results/data', db.getResultByDateAndTimeAndstoreShopping);
 
 // listen for requests
 app.listen(3000, () => {
