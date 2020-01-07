@@ -35,7 +35,10 @@ app.get('shopping/top', db.getTopByShopping);
 app.post('/results', db.createResult);
 app.get('/results/get', db.getResultByDateAndTime);
 app.get('/results/data', db.getResultByDateAndTimeAndstoreShopping);
-app.get('/results/store', db.getResultsByOneMonthAndByStoreAndShopping);
+app.get('/results/store/month', db.getResultsByOneMonthAndByStoreAndShopping);
+app.get('/results/store/week', db.getResultsByOneWeekAndByStoreAndShopping);
+app.get('/results/store/day', db.getResultsByOneDayAndByStoreAndShopping);
+app.get('/results/store/hour', db.getResultsByOneHourAndByStoreAndShopping);
 
 // listen for requests
 app.listen(3000, () => {

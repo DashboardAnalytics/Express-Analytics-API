@@ -101,7 +101,6 @@ exports.getShoppingByName = async (req, res) => {
 }
 
 exports.getAllShoppings = async (req, res) => {
-
   pool.query('SELECT * FROM shopping ORDER BY id ASC', (error, results) => {
     if (error) {
       res.send({
@@ -480,6 +479,205 @@ exports.getResultsByOneMonthAndByStoreAndShopping = async (req, res) => {
 
   if(store_id && shopping_id){
     pool.query('SELECT * FROM result WHERE frame_date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4', [dateOneMonthAgo, dateNow, store_id, shopping_id], (error, results) => {
+      if(error){
+        console.log(error);
+      }
+      else{
+        if(results['rows'].length > 0){
+          res.send({
+            status: 200,
+            message: "OK.",
+            result: true,
+            data: results.rows
+          });
+        }
+        else{
+          res.send({
+            status: 404,
+            message: "No matches.",
+            result: false,
+            data: []
+          });
+        }
+      }
+    });
+  }
+  else if(store_name && shopping_name){
+    pool.query('SELECT rs.id, rs.id_shopping, rs.id_store, rs.n_people, rs.frame, rs.frame_time, rs.frame_date FROM result rs, store st, shopping sh WHERE sh.name = $1 AND rs.id_shopping = sh.id AND rs.id_store = st.id AND st.name = $2 AND rs.frame_date BETWEEN $3 AND $4', [shopping_name, store_name, dateOneMonthAgo, dateNow], (error, results) => {
+      if(error){
+        console.log(error);
+      }
+      else{
+        if(results['rows'].length > 0){
+          res.send({
+            status: 200,
+            message: "OK.",
+            result: true,
+            data: results.rows
+          });
+        }
+        else{
+          res.send({
+            status: 404,
+            message: "No matches.",
+            result: false,
+            data: []
+          });
+        }
+      }
+    });
+  }
+  else{
+    res.send({
+      status: 403,
+      message: "No store id / name given.",
+      result: false,
+      data: []
+    });
+  }
+}
+
+exports.getResultsByOneWeekAndByStoreAndShopping = async (req, res) => {
+  let dateNow = moment().format('YYYY-MM-DD');
+  let dateOneWeekAgo = moment().subtract(7, 'days').format('YYYY-MM-DD');
+
+  const { store_id, store_name, shopping_id, shopping_name } = req.body;
+
+  if(store_id && shopping_id){
+    pool.query('SELECT * FROM result WHERE frame_date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4', [dateOneWeekAgo, dateNow, store_id, shopping_id], (error, results) => {
+      if(error){
+        console.log(error);
+      }
+      else{
+        if(results['rows'].length > 0){
+          res.send({
+            status: 200,
+            message: "OK.",
+            result: true,
+            data: results.rows
+          });
+        }
+        else{
+          res.send({
+            status: 404,
+            message: "No matches.",
+            result: false,
+            data: []
+          });
+        }
+      }
+    });
+  }
+  else if(store_name && shopping_name){
+    pool.query('SELECT rs.id, rs.id_shopping, rs.id_store, rs.n_people, rs.frame, rs.frame_time, rs.frame_date FROM result rs, store st, shopping sh WHERE sh.name = $1 AND rs.id_shopping = sh.id AND rs.id_store = st.id AND st.name = $2 AND rs.frame_date BETWEEN $3 AND $4', [shopping_name, store_name, dateOneWeekAgo, dateNow], (error, results) => {
+      if(error){
+        console.log(error);
+      }
+      else{
+        if(results['rows'].length > 0){
+          res.send({
+            status: 200,
+            message: "OK.",
+            result: true,
+            data: results.rows
+          });
+        }
+        else{
+          res.send({
+            status: 404,
+            message: "No matches.",
+            result: false,
+            data: []
+          });
+        }
+      }
+    });
+  }
+  else{
+    res.send({
+      status: 403,
+      message: "No store id / name given.",
+      result: false,
+      data: []
+    });
+  }
+}
+
+exports.getResultsByOneDayAndByStoreAndShopping = async (req, res) => {
+  let dateNow = moment().format('YYYY-MM-DD');
+  let dateOneDayAgo = moment().subtract(1, 'days').format('YYYY-MM-DD');
+
+  const { store_id, store_name, shopping_id, shopping_name } = req.body;
+
+  if(store_id && shopping_id){
+    pool.query('SELECT * FROM result WHERE frame_date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4', [dateOneDayAgo, dateNow, store_id, shopping_id], (error, results) => {
+      if(error){
+        console.log(error);
+      }
+      else{
+        if(results['rows'].length > 0){
+          res.send({
+            status: 200,
+            message: "OK.",
+            result: true,
+            data: results.rows
+          });
+        }
+        else{
+          res.send({
+            status: 404,
+            message: "No matches.",
+            result: false,
+            data: []
+          });
+        }
+      }
+    });
+  }
+  else if(store_name && shopping_name){
+    pool.query('SELECT rs.id, rs.id_shopping, rs.id_store, rs.n_people, rs.frame, rs.frame_time, rs.frame_date FROM result rs, store st, shopping sh WHERE sh.name = $1 AND rs.id_shopping = sh.id AND rs.id_store = st.id AND st.name = $2 AND rs.frame_date BETWEEN $3 AND $4', [shopping_name, store_name, dateOneDayAgo, dateNow], (error, results) => {
+      if(error){
+        console.log(error);
+      }
+      else{
+        if(results['rows'].length > 0){
+          res.send({
+            status: 200,
+            message: "OK.",
+            result: true,
+            data: results.rows
+          });
+        }
+        else{
+          res.send({
+            status: 404,
+            message: "No matches.",
+            result: false,
+            data: []
+          });
+        }
+      }
+    });
+  }
+  else{
+    res.send({
+      status: 403,
+      message: "No store id / name given.",
+      result: false,
+      data: []
+    });
+  }
+}
+
+exports.getResultsByOneHourAndByStoreAndShopping = async (req, res) => {
+  let dateNow = moment().format('YYYY-MM-DD');
+  let hourNow = moment().format('HH:mm');
+  let dateOneHourAgo = moment().subtract(1, 'hours').format('HH:mm');
+
+  const { store_id, store_name, shopping_id, shopping_name } = req.body;
+
+  if(store_id && shopping_id){
+    pool.query('SELECT * FROM result WHERE frame_time BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4 AND frame_date = $5', [dateOneHourAgo, hourNow, store_id, shopping_id, dateNow], (error, results) => {
       if(error){
         console.log(error);
       }
