@@ -6,6 +6,7 @@
   "body-parser": "^1.5.1",
   "express": "^4.17.1",
   "method-override": "^2.1.2",
+  "moment": "^2.24.0",
   "mongoose": "^5.8.0",
   "mongoose-long": "^0.2.1",
   "pg": "^7.14.0",

@@ -1,4 +1,5 @@
 const Pool = require('pg').Pool
+const moment = require('moment')
 const pool = new Pool({
   user: 'doadmin',
   host: 'pingesoresults-do-user-6864511-0.db.ondigitalocean.com',
@@ -202,7 +203,6 @@ exports.getStoreByName = async (req, res) => {
 }
 
 exports.getAllStores = async (req, res) => {
-
   pool.query('SELECT * FROM store ORDER BY id ASC', (error, results) => {
     if (error) {
       res.send({
@@ -221,6 +221,78 @@ exports.getAllStores = async (req, res) => {
       });
     }
   });
+}
+
+exports.getAllStoresByShopping = async (req, res) => {
+  const { shopping_name, shopping_id } = req.body;
+  if(shopping_name){
+    pool.query('SELECT st.id, st.name FROM result rs, store st, shopping sh WHERE sh.name = $1 AND rs.id_shopping = sh.id AND rs.id_store = st.id GROUP BY st.id', [shopping_name], (error, results) => {
+      if(error){
+        res.send({
+          status: 404,
+          message: "No matches.",
+          result: false,
+          data: []
+        });
+      }
+      else{
+        if(results['rows'].length > 0){
+          res.send({
+            status: 200,
+            message: "OK.",
+            result: true,
+            data: results.rows
+          });
+        }
+        else{
+          res.send({
+            status: 404,
+            message: "No matches.",
+            result: false,
+            data: []
+          });
+        }
+      }
+    });
+  }
+  else if(shopping_id){
+    pool.query('SELECT st.id, st.name FROM result rs, store st, shopping sh WHERE sh.id = $1 AND rs.id_shopping = sh.id AND rs.id_store = st.id GROUP BY st.id', [shopping_id], (error, results) => {
+      if(error){
+        res.send({
+          status: 404,
+          message: "No matches.",
+          result: false,
+          data: []
+        });
+      }
+      else{
+        if(results['rows'].length > 0){
+          res.send({
+            status: 200,
+            message: "OK.",
+            result: true,
+            data: results.rows
+          });
+        }
+        else{
+          res.send({
+            status: 404,
+            message: "No matches.",
+            result: false,
+            data: []
+          });
+        }
+      }
+    });
+  }
+  else{
+    res.send({
+      status: 403,
+      message: "No shopping id / name given.",
+      result: false,
+      data: []
+    });
+  }
 }
 
 
@@ -396,6 +468,146 @@ exports.getResultByDateAndTimeAndstoreShopping = async (req, res) => {
       status: 403,
       message: "One or more data parameters are empty.",
       result: false
+    });
+  }
+}
+
+exports.getResultsByOneMonthAndByStoreAndShopping = async (req, res) => {
+  let dateNow = moment().format('YYYY-MM-DD');
+  let dateOneMonthAgo = moment().subtract(1, 'month').format('YYYY-MM-DD');
+
+  const { store_id, store_name, shopping_id, shopping_name } = req.body;
+
+  if(store_id && shopping_id){
+    pool.query('SELECT * FROM result WHERE frame_date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4', [dateOneMonthAgo, dateNow, store_id, shopping_id], (error, results) => {
+      if(error){
+        console.log(error);
+      }
+      else{
+        if(results['rows'].length > 0){
+          res.send({
+            status: 200,
+            message: "OK.",
+            result: true,
+            data: results.rows
+          });
+        }
+        else{
+          res.send({
+            status: 404,
+            message: "No matches.",
+            result: false,
+            data: []
+          });
+        }
+      }
+    });
+  }
+  else if(store_name && shopping_name){
+    pool.query('SELECT rs.id, rs.id_shopping, rs.id_store, rs.n_people, rs.frame, rs.frame_time, rs.frame_date FROM result rs, store st, shopping sh WHERE sh.name = $1 AND rs.id_shopping = sh.id AND rs.id_store = st.id AND st.name = $2 AND rs.frame_date BETWEEN $3 AND $4', [shopping_name, store_name, dateOneMonthAgo, dateNow], (error, results) => {
+      if(error){
+        console.log(error);
+      }
+      else{
+        if(results['rows'].length > 0){
+          res.send({
+            status: 200,
+            message: "OK.",
+            result: true,
+            data: results.rows
+          });
+        }
+        else{
+          res.send({
+            status: 404,
+            message: "No matches.",
+            result: false,
+            data: []
+          });
+        }
+      }
+    });
+  }
+  else{
+    res.send({
+      status: 403,
+      message: "No store id / name given.",
+      result: false,
+      data: []
+    });
+  }
+}
+
+exports.getTopByShopping = async (req, res) => {
+  const { shopping_id, shopping_name, top_limit } = req.body;
+  if ( shopping_id && top_limit ){
+    pool.query('SELECT st.name as store, SUM(rs.n_people) as total FROM result rs, store st WHERE rs.id_shopping = $1 AND rs.id_store = st.id GROUP BY st.name order by total DESC LIMIT $2', [shopping_id, top_limit], (error, results) => {
+      if(error){
+        res.send({
+          status: 400,
+          message: "ERROR.",
+          result: false,
+          data: [],
+          error: error
+        });
+      }
+      else{
+        if(results['rows'].length > 0){
+          res.send({
+            status: 200,
+            message: "OK.",
+            result: true,
+            data: results.rows
+          });
+        }
+        else{
+          res.send({
+            status: 404,
+            message: "No matches.",
+            result: false,
+            data: []
+          });
+        }
+      }
+    });
+  }
+  else if ( shopping_name && top_limit ){
+    pool.query('SELECT st.name as store, SUM(rs.n_people) as total FROM result rs, store st, shopping sh WHERE rs.id_shopping = sh.id AND rs.id_store = st.id AND sh.name = $1 GROUP BY st.name order by total DESC LIMIT $2', [shopping_name, top_limit], (error, results) => {
+      if(error){
+        res.send({
+          status: 200,
+          message: "OK.",
+          result: true,
+          data: [],
+          error: error
+        });
+      }
+      else{
+        if(results['rows'].length > 0){
+          res.send({
+            status: 200,
+            message: "OK.",
+            result: true,
+            data: results.rows
+          });
+        }
+        else{
+          res.send({
+            status: 404,
+            message: "No matches.",
+            result: false,
+            data: []
+          });
+        }
+      }
+    });
+  }
+  else{
+    res.send({
+      status: 403,
+      message: "Input values missing.",
+      result: false,
+      data: []
     });
   }
 }
