@@ -30,6 +30,7 @@ app.get('/store/data', db.getAllStores);
 
 app.get('/shopping/store/name', db.getStoreAndShoppingByName);
 app.get('/shopping/store', db.getAllStoresByShopping);
+app.get('shopping/top', db.getTopByShopping);
 
 app.post('/results', db.createResult);
 app.get('/results/get', db.getResultByDateAndTime);
