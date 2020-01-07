@@ -33,7 +33,7 @@ exports.createShopping = async (req, res) => {
 }
 
 exports.getShoppingById = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.query;
 
   id = parseInt(id);
 
@@ -68,7 +68,7 @@ exports.getShoppingById = async (req, res) => {
 }
 
 exports.getShoppingByName = async (req, res) => {
-  const { name } = req.body;
+  const { name } = req.query;
 
   pool.query('SELECT * FROM shopping WHERE name = $1', [name], (error, results) => {
     if(error){
@@ -144,7 +144,7 @@ exports.createStore = (req, res) => {
 }
 
 exports.getStoreById = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.query;
 
   id = parseInt(id);
 
@@ -169,7 +169,7 @@ exports.getStoreById = async (req, res) => {
 }
 
 exports.getStoreByName = async (req, res) => {
-  const { name } = req.body;
+  const { name } = req.query;
 
   pool.query('SELECT * FROM store WHERE name = $1', [name], (error, results) => {
     if(error){
@@ -223,7 +223,7 @@ exports.getAllStores = async (req, res) => {
 }
 
 exports.getAllStoresByShopping = async (req, res) => {
-  const { shopping_name, shopping_id } = req.body;
+  const { shopping_name, shopping_id } = req.query;
   if(shopping_name){
     pool.query('SELECT st.id, st.name FROM result rs, store st, shopping sh WHERE sh.name = $1 AND rs.id_shopping = sh.id AND rs.id_store = st.id GROUP BY st.id', [shopping_name], (error, results) => {
       if(error){
@@ -296,7 +296,7 @@ exports.getAllStoresByShopping = async (req, res) => {
 
 
 exports.getStoreAndShoppingByName = async (req, res) => {
-  const { shopping_name, store_name } = req.body;
+  const { shopping_name, store_name } = req.query;
 
   pool.query('SELECT st.id AS id_store, st.name AS store_name, sh.id AS id_shopping, sh.name AS shopping_name FROM store st, shopping sh WHERE st.name = $1 AND sh.name = $2', [store_name, shopping_name], (error, results) => {
     if(error){
@@ -367,7 +367,7 @@ exports.createResult = async (req, res) => {
 }
 
 exports.getResultByDateAndTime = async (req, res) => {
-  const { time_start, time_end, date_start, date_end } = req.body;
+  const { time_start, time_end, date_start, date_end } = req.query;
 
   pool.query('SELECT * FROM result WHERE frame_date BETWEEN $1 AND $2 AND frame_time BETWEEN $3 AND $4', [date_start, date_end, time_start, time_end], (error, results) => {
     if(error){
@@ -395,7 +395,7 @@ exports.getResultByDateAndTime = async (req, res) => {
 }
 
 exports.getResultByDateAndTimeAndstoreShopping = async (req, res) => {
-  const { time_start, time_end, date_start, date_end, store_name, shopping_name, store_id, shopping_id } = req.body;
+  const { time_start, time_end, date_start, date_end, store_name, shopping_name, store_id, shopping_id } = req.query;
   if(store_id && shopping_id){
     await pool.query('SELECT * FROM result WHERE id_shopping = $1 AND id_store = $2 AND frame_date BETWEEN $3 AND $4 AND frame_time BETWEEN $5 AND $6', [shopping_id, store_id, date_start, date_end, time_start, time_end], (error, results) => {
       if(error){
@@ -475,7 +475,7 @@ exports.getResultsByOneMonthAndByStoreAndShopping = async (req, res) => {
   let dateNow = moment().format('YYYY-MM-DD');
   let dateOneMonthAgo = moment().subtract(1, 'month').format('YYYY-MM-DD');
 
-  const { store_id, store_name, shopping_id, shopping_name } = req.body;
+  const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
   if(store_id && shopping_id){
     pool.query('SELECT * FROM result WHERE frame_date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4', [dateOneMonthAgo, dateNow, store_id, shopping_id], (error, results) => {
@@ -541,7 +541,7 @@ exports.getResultsByOneWeekAndByStoreAndShopping = async (req, res) => {
   let dateNow = moment().format('YYYY-MM-DD');
   let dateOneWeekAgo = moment().subtract(7, 'days').format('YYYY-MM-DD');
 
-  const { store_id, store_name, shopping_id, shopping_name } = req.body;
+  const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
   if(store_id && shopping_id){
     pool.query('SELECT * FROM result WHERE frame_date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4', [dateOneWeekAgo, dateNow, store_id, shopping_id], (error, results) => {
@@ -607,7 +607,7 @@ exports.getResultsByOneDayAndByStoreAndShopping = async (req, res) => {
   let dateNow = moment().format('YYYY-MM-DD');
   let dateOneDayAgo = moment().subtract(1, 'days').format('YYYY-MM-DD');
 
-  const { store_id, store_name, shopping_id, shopping_name } = req.body;
+  const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
   if(store_id && shopping_id){
     pool.query('SELECT * FROM result WHERE frame_date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4', [dateOneDayAgo, dateNow, store_id, shopping_id], (error, results) => {
@@ -674,7 +674,7 @@ exports.getResultsByOneHourAndByStoreAndShopping = async (req, res) => {
   let hourNow = moment().format('HH:mm');
   let dateOneHourAgo = moment().subtract(1, 'hours').format('HH:mm');
 
-  const { store_id, store_name, shopping_id, shopping_name } = req.body;
+  const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
   if(store_id && shopping_id){
     pool.query('SELECT * FROM result WHERE frame_time BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4 AND frame_date = $5', [dateOneHourAgo, hourNow, store_id, shopping_id, dateNow], (error, results) => {
@@ -737,7 +737,7 @@ exports.getResultsByOneHourAndByStoreAndShopping = async (req, res) => {
 }
 
 exports.getTopByShopping = async (req, res) => {
-  const { shopping_id, shopping_name, top_limit } = req.body;
+  const { shopping_id, shopping_name, top_limit } = req.query;
   if ( shopping_id && top_limit ){
     pool.query('SELECT st.name as store, SUM(rs.n_people) as total FROM result rs, store st WHERE rs.id_shopping = $1 AND rs.id_store = st.id GROUP BY st.name order by total DESC LIMIT $2', [shopping_id, top_limit], (error, results) => {
       if(error){
