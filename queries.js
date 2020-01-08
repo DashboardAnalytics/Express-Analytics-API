@@ -677,7 +677,7 @@ exports.getResultsByOneHourAndByStoreAndShopping = async (req, res) => {
   const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
   if(store_id && shopping_id){
-    pool.query('SELECT people as visits, time as date FROM result WHERE time BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4 AND date = $5', [dateOneHourAgo, hourNow, store_id, shopping_id, dateNow], (error, results) => {
+    pool.query('SELECT people as visits, time as date FROM reduced_result WHERE time BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4 AND date = $5', [dateOneHourAgo, hourNow, store_id, shopping_id, dateNow], (error, results) => {
       if(error){
         console.log(error);
       }
