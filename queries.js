@@ -225,7 +225,7 @@ exports.getAllStores = async (req, res) => {
 exports.getAllStoresByShopping = async (req, res) => {
   const { shopping_name, shopping_id } = req.query;
   if(shopping_name){
-    pool.query('SELECT st.id, st.name FROM result rs, store st, shopping sh WHERE sh.name = $1 AND rs.id_shopping = sh.id AND rs.id_store = st.id GROUP BY st.id', [shopping_name], (error, results) => {
+    pool.query('SELECT st.id, st.name FROM store st, shopping sh, shopping_store ss WHERE sh.name = $1 AND sh.id = ss.id_shopping AND st.id = ss.id_store', [shopping_name], (error, results) => {
       if(error){
         res.send({
           status: 404,
@@ -255,7 +255,7 @@ exports.getAllStoresByShopping = async (req, res) => {
     });
   }
   else if(shopping_id){
-    pool.query('SELECT st.id, st.name FROM result rs, store st, shopping sh WHERE sh.id = $1 AND rs.id_shopping = sh.id AND rs.id_store = st.id GROUP BY st.id', [shopping_id], (error, results) => {
+    pool.query('SELECT st.id, st.name FROM store st, shopping sh, shopping_store ss WHERE sh.id = $1 AND sh.id = ss.id_shopping AND st.id = ss.id_store', [shopping_id], (error, results) => {
       if(error){
         res.send({
           status: 404,
@@ -677,7 +677,7 @@ exports.getResultsByOneHourAndByStoreAndShopping = async (req, res) => {
   const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
   if(store_id && shopping_id){
-    pool.query('SELECT * FROM result WHERE frame_time BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4 AND frame_date = $5', [dateOneHourAgo, hourNow, store_id, shopping_id, dateNow], (error, results) => {
+    pool.query('SELECT n_people as visits, frame_time as date FROM result WHERE frame_time BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4 AND frame_date = $5', [dateOneHourAgo, hourNow, store_id, shopping_id, dateNow], (error, results) => {
       if(error){
         console.log(error);
       }
