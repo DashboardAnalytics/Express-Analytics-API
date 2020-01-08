@@ -472,8 +472,8 @@ exports.getResultByDateAndTimeAndstoreShopping = async (req, res) => {
 }
 
 exports.getResultsByOneMonthAndByStoreAndShopping = async (req, res) => {
-  let dateNow = moment().format('YYYY-MM-DD');
-  let dateOneMonthAgo = moment().subtract(1, 'month').format('YYYY-MM-DD');
+  let dateNow = moment().format('YYYY-DD-MM');
+  let dateOneMonthAgo = moment().subtract(1, 'month').format('YYYY-DD-MM');
 
   const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
@@ -538,8 +538,8 @@ exports.getResultsByOneMonthAndByStoreAndShopping = async (req, res) => {
 }
 
 exports.getResultsByOneWeekAndByStoreAndShopping = async (req, res) => {
-  let dateNow = moment().format('YYYY-MM-DD');
-  let dateOneWeekAgo = moment().subtract(7, 'days').format('YYYY-MM-DD');
+  let dateNow = moment().format('YYYY-DD-MM');
+  let dateOneWeekAgo = moment().subtract(7, 'days').format('YYYY-DD-MM');
 
   const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
@@ -604,8 +604,8 @@ exports.getResultsByOneWeekAndByStoreAndShopping = async (req, res) => {
 }
 
 exports.getResultsByOneDayAndByStoreAndShopping = async (req, res) => {
-  let dateNow = moment().format('YYYY-MM-DD');
-  let dateOneDayAgo = moment().subtract(1, 'days').format('YYYY-MM-DD');
+  let dateNow = moment().format('YYYY-DD-MM');
+  let dateOneDayAgo = moment().subtract(1, 'days').format('YYYY-DD-MM');
 
   const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
@@ -670,7 +670,7 @@ exports.getResultsByOneDayAndByStoreAndShopping = async (req, res) => {
 }
 
 exports.getResultsByOneHourAndByStoreAndShopping = async (req, res) => {
-  let dateNow = moment().format('YYYY-MM-DD');
+  let dateNow = moment().format('YYYY-DD-MM');
   let hourNow = moment().format('HH:mm');
   let dateOneHourAgo = moment().subtract(1, 'hours').format('HH:mm');
 
