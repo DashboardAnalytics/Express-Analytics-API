@@ -37,6 +37,7 @@ app.get('/results/get', db.getResultByDateAndTime);
 app.get('/results/data', db.getResultByDateAndTimeAndstoreShopping);
 app.get('/results/store/month', db.getResultsByOneMonthAndByStoreAndShopping);
 app.get('/results/store/week', db.getResultsByOneWeekAndByStoreAndShopping);
+app.get('/results/store/two_week', db.getResultsByTwoWeekAndByStoreAndShopping);
 app.get('/results/store/day', db.getResultsByOneDayAndByStoreAndShopping);
 app.get('/results/store/hour', db.getResultsByOneHourAndByStoreAndShopping);
 
