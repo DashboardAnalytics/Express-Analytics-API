@@ -478,7 +478,7 @@ exports.getResultsByOneMonthAndByStoreAndShopping = async (req, res) => {
   const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
   if(store_id && shopping_id){
-    pool.query('SELECT to_char(date, 'DD-MM-YYYY') AS date, CAST(avg(people) AS INTEGER) as visitors FROM reduced_result WHERE date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4 GROUP BY date ORDER BY date limit 30', [dateOneMonthAgo, dateNow, store_id, shopping_id], (error, results) => {
+    pool.query("SELECT to_char(date, 'DD-MM-YYYY') AS date, CAST(avg(people) AS INTEGER) as visitors FROM reduced_result WHERE date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4 GROUP BY date ORDER BY date limit 30", [dateOneMonthAgo, dateNow, store_id, shopping_id], (error, results) => {
       if(error){
         console.log(error);
       }
@@ -503,7 +503,7 @@ exports.getResultsByOneMonthAndByStoreAndShopping = async (req, res) => {
     });
   }
   else if(store_name && shopping_name){
-    pool.query('SELECT to_char(rr.date, 'DD-MM-YYYY') AS date, CAST(avg(rr.people) AS INTEGER) as visitors FROM reduced_result rr, store st, shopping sh WHERE rr.date BETWEEN $1 AND $2 AND rr.id_store = st.id  AND rr.id_shopping = sh.id AND st.name = $3 AND sh.name = $4 GROUP BY date ORDER BY date limit 30', [dateOneMonthAgo, dateNow, store_name, shopping_name], (error, results) => {
+    pool.query("SELECT to_char(rr.date, 'DD-MM-YYYY') AS date, CAST(avg(rr.people) AS INTEGER) as visitors FROM reduced_result rr, store st, shopping sh WHERE rr.date BETWEEN $1 AND $2 AND rr.id_store = st.id  AND rr.id_shopping = sh.id AND st.name = $3 AND sh.name = $4 GROUP BY date ORDER BY date limit 30", [dateOneMonthAgo, dateNow, store_name, shopping_name], (error, results) => {
       if(error){
         console.log(error);
       }
@@ -544,7 +544,7 @@ exports.getResultsByTwoWeekAndByStoreAndShopping = async (req, res) => {
   const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
   if(store_id && shopping_id){
-    pool.query('SELECT to_char(date, 'DD-MM-YYYY') AS date, CAST(avg(people) AS INTEGER) AS visitors FROM reduced_result WHERE date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4 GROUP BY date ORDER BY date limit 14', [dateOneWeekAgo, dateNow, store_id, shopping_id], (error, results) => {
+    pool.query("SELECT to_char(date, 'DD-MM-YYYY') AS date, CAST(avg(people) AS INTEGER) AS visitors FROM reduced_result WHERE date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4 GROUP BY date ORDER BY date limit 14", [dateOneWeekAgo, dateNow, store_id, shopping_id], (error, results) => {
       if(error){
         console.log(error);
       }
@@ -569,7 +569,7 @@ exports.getResultsByTwoWeekAndByStoreAndShopping = async (req, res) => {
     });
   }
   else if(store_name && shopping_name){
-    pool.query('SELECT to_char(rr.date, 'DD-MM-YYYY') AS date, CAST(avg(rr.people) AS INTEGER) AS visitors FROM reduced_result rr, store st, shopping sh WHERE rr.date BETWEEN $1 AND $2 AND rr.id_store = st.id  AND rr.id_shopping = sh.id AND st.name = $3 AND sh.name = $4 GROUP BY date ORDER BY date limit 14', [dateOneWeekAgo, dateNow, store_name, shopping_name], (error, results) => {
+    pool.query("SELECT to_char(rr.date, 'DD-MM-YYYY') AS date, CAST(avg(rr.people) AS INTEGER) AS visitors FROM reduced_result rr, store st, shopping sh WHERE rr.date BETWEEN $1 AND $2 AND rr.id_store = st.id  AND rr.id_shopping = sh.id AND st.name = $3 AND sh.name = $4 GROUP BY date ORDER BY date limit 14", [dateOneWeekAgo, dateNow, store_name, shopping_name], (error, results) => {
       if(error){
         console.log(error);
       }
@@ -610,7 +610,7 @@ exports.getResultsByOneWeekAndByStoreAndShopping = async (req, res) => {
   const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
   if(store_id && shopping_id){
-    pool.query('SELECT to_char(date, 'DD-MM-YYYY') AS date, CAST(avg(people) AS INTEGER) AS visitors FROM reduced_result WHERE date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4 GROUP BY date ORDER BY date limit 7', [dateOneWeekAgo, dateNow, store_id, shopping_id], (error, results) => {
+    pool.query("SELECT to_char(date, 'DD-MM-YYYY') AS date, CAST(avg(people) AS INTEGER) AS visitors FROM reduced_result WHERE date BETWEEN $1 AND $2 AND id_store = $3 AND id_shopping = $4 GROUP BY date ORDER BY date limit 7", [dateOneWeekAgo, dateNow, store_id, shopping_id], (error, results) => {
       if(error){
         console.log(error);
       }
@@ -635,7 +635,7 @@ exports.getResultsByOneWeekAndByStoreAndShopping = async (req, res) => {
     });
   }
   else if(store_name && shopping_name){
-    pool.query('SELECT to_char(rr.date, 'DD-MM-YYYY') AS date, CAST(avg(rr.people) AS INTEGER) AS visitors FROM reduced_result rr, store st, shopping sh WHERE rr.date BETWEEN $1 AND $2 AND rr.id_store = st.id  AND rr.id_shopping = sh.id AND st.name = $3 AND sh.name = $4 GROUP BY date ORDER BY date limit 7', [dateOneWeekAgo, dateNow, store_name, shopping_name], (error, results) => {
+    pool.query("SELECT to_char(rr.date, 'DD-MM-YYYY') AS date, CAST(avg(rr.people) AS INTEGER) AS visitors FROM reduced_result rr, store st, shopping sh WHERE rr.date BETWEEN $1 AND $2 AND rr.id_store = st.id  AND rr.id_shopping = sh.id AND st.name = $3 AND sh.name = $4 GROUP BY date ORDER BY date limit 7", [dateOneWeekAgo, dateNow, store_name, shopping_name], (error, results) => {
       if(error){
         console.log(error);
       }
@@ -676,7 +676,7 @@ exports.getResultsByOneDayAndByStoreAndShopping = async (req, res) => {
   const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
   if(store_id && shopping_id){
-    pool.query('select date_trunc('hour', time) AS date, CAST(avg(people) AS INTEGER) AS visitors from reduced_result WHERE date = $1 AND id_store = $2 AND id_shopping = $3 group by 1 ORDER BY date', [dateOneDayAgo, store_id, shopping_id], (error, results) => {
+    pool.query("select date_trunc('hour', time) AS date, CAST(avg(people) AS INTEGER) AS visitors from reduced_result WHERE date = $1 AND id_store = $2 AND id_shopping = $3 group by 1 ORDER BY date", [dateOneDayAgo, store_id, shopping_id], (error, results) => {
       if(error){
         console.log(error);
       }
@@ -701,7 +701,7 @@ exports.getResultsByOneDayAndByStoreAndShopping = async (req, res) => {
     });
   }
   else if(store_name && shopping_name){
-    pool.query('select date_trunc('hour', rr.time) AS date, CAST(avg(rr.people) AS INTEGER) AS visitors from reduced_result rr, store st, shopping sh WHERE rr.date = $1 AND rr.id_store = st.id AND rr.id_shopping = sh.id AND st.name = $2 AND sh.name = $3 group by 1 ORDER BY date', [dateOneDayAgo, store_name, shopping_name], (error, results) => {
+    pool.query("select date_trunc('hour', rr.time) AS date, CAST(avg(rr.people) AS INTEGER) AS visitors from reduced_result rr, store st, shopping sh WHERE rr.date = $1 AND rr.id_store = st.id AND rr.id_shopping = sh.id AND st.name = $2 AND sh.name = $3 group by 1 ORDER BY date", [dateOneDayAgo, store_name, shopping_name], (error, results) => {
       if(error){
         console.log(error);
       }
@@ -743,7 +743,7 @@ exports.getResultsByOneHourAndByStoreAndShopping = async (req, res) => {
   const { store_id, store_name, shopping_id, shopping_name } = req.query;
 
   if(store_id && shopping_id){
-    pool.query('select date_trunc('minute', time) AS date, CAST(avg(people) AS INTEGER) as visitors from reduced_result WHERE time between $1 AND $2 AND date = $3 AND id_store = $4 AND id_shopping = $5 group by 1 ORDER BY date', [dateOneHourAgo, hourNow, dateNow, store_id, shopping_id], (error, results) => {
+    pool.query("select date_trunc('minute', time) AS date, CAST(avg(people) AS INTEGER) as visitors from reduced_result WHERE time between $1 AND $2 AND date = $3 AND id_store = $4 AND id_shopping = $5 group by 1 ORDER BY date", [dateOneHourAgo, hourNow, dateNow, store_id, shopping_id], (error, results) => {
       if(error){
         console.log(error);
       }
@@ -768,7 +768,7 @@ exports.getResultsByOneHourAndByStoreAndShopping = async (req, res) => {
     });
   }
   else if(store_name && shopping_name){
-    pool.query('select date_trunc('minute', rr.time) AS date, CAST(avg(rr.people) AS INTEGER) as visitors from reduced_result rr, store st, shopping sh WHERE rr.time between $1 AND $2 AND rr.date = $3 AND rr.id_store = st.id AND rr.id_shopping = sh.id AND st.name = $4 AND sh.name = $5 group by 1 ORDER BY date', [dateOneHourAgo, hourNow, dateNow, store_name, shopping_name], (error, results) => {
+    pool.query("select date_trunc('minute', rr.time) AS date, CAST(avg(rr.people) AS INTEGER) as visitors from reduced_result rr, store st, shopping sh WHERE rr.time between $1 AND $2 AND rr.date = $3 AND rr.id_store = st.id AND rr.id_shopping = sh.id AND st.name = $4 AND sh.name = $5 group by 1 ORDER BY date", [dateOneHourAgo, hourNow, dateNow, store_name, shopping_name], (error, results) => {
       if(error){
         console.log(error);
       }
